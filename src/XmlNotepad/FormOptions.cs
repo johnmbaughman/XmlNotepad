@@ -185,8 +185,17 @@ namespace XmlNotepad
         string newLineChars;
         string language;
         int maximumLineLength;
+        int maximumValueLength;
         bool autoFormatLongLines;
         bool ignoreDTD;
+        bool xmlDiffIgnoreChildOrder;
+        bool xmlDiffIgnoreComments;
+        bool xmlDiffIgnorePI;
+        bool xmlDiffIgnoreWhitespace;
+        bool xmlDiffIgnoreNamespaces;
+        bool xmlDiffIgnorePrefixes;
+        bool xmlDiffIgnoreXmlDecl;
+        bool xmlDiffIgnoreDtd;
 
         public UserSettings(Settings s) {            
             this.settings = s;
@@ -212,6 +221,15 @@ namespace XmlNotepad
             maximumLineLength = (int)this.settings["MaximumLineLength"];
             autoFormatLongLines = (bool)this.settings["AutoFormatLongLines"];
             ignoreDTD = (bool)this.settings["IgnoreDTD"];
+
+            this.xmlDiffIgnoreChildOrder = (bool)this.settings["XmlDiffIgnoreChildOrder"];
+            this.xmlDiffIgnoreComments = (bool)this.settings["XmlDiffIgnoreComments"];
+            this.xmlDiffIgnorePI = (bool)this.settings["XmlDiffIgnorePI"];
+            this.xmlDiffIgnoreWhitespace = (bool)this.settings["XmlDiffIgnoreWhitespace"];
+            this.xmlDiffIgnoreNamespaces = (bool)this.settings["XmlDiffIgnoreNamespaces"];
+            this.xmlDiffIgnorePrefixes = (bool)this.settings["XmlDiffIgnorePrefixes"];
+            this.xmlDiffIgnoreXmlDecl = (bool)this.settings["XmlDiffIgnoreXmlDecl"];
+            this.xmlDiffIgnoreDtd = (bool)this.settings["XmlDiffIgnoreDtd"];
         }
 
         public static string Escape(string nl) {
@@ -244,8 +262,18 @@ namespace XmlNotepad
 
             this.settings["Language"] = ("" + this.language).Trim();
             this.settings["MaximumLineLength"] = this.maximumLineLength;
+            this.settings["MaximumValueLength"] = this.maximumValueLength;
             this.settings["AutoFormatLongLines"] = this.autoFormatLongLines;
             this.settings["IgnoreDTD"] = this.ignoreDTD;
+
+            this.settings["XmlDiffIgnoreChildOrder"] = this.xmlDiffIgnoreChildOrder;
+            this.settings["XmlDiffIgnoreComments"] = this.xmlDiffIgnoreComments;
+            this.settings["XmlDiffIgnorePI"] = this.xmlDiffIgnorePI;
+            this.settings["XmlDiffIgnoreWhitespace"] = this.xmlDiffIgnoreWhitespace;
+            this.settings["XmlDiffIgnoreNamespaces"] = this.xmlDiffIgnoreNamespaces;
+            this.settings["XmlDiffIgnorePrefixes"] = this.xmlDiffIgnorePrefixes;
+            this.settings["XmlDiffIgnoreXmlDecl"] = this.xmlDiffIgnoreXmlDecl;
+            this.settings["XmlDiffIgnoreDtd"] = this.xmlDiffIgnoreDtd;
 
             this.settings.OnChanged("Colors");
 
@@ -269,6 +297,7 @@ namespace XmlNotepad
             newLineChars = Escape("\r\n");
             language = "";
             this.maximumLineLength = 10000;
+            this.maximumValueLength = short.MaxValue;
             ignoreDTD = false;
         }
 
@@ -479,6 +508,21 @@ namespace XmlNotepad
         }
 
         [SRCategoryAttribute("LongLineCategory")]
+        [LocDisplayName("MaximumValueLengthProperty")]
+        [SRDescriptionAttribute("MaximumValueLengthDescription")]
+        public int MaximumValueLength
+        {
+            get
+            {
+                return this.maximumValueLength;
+            }
+            set
+            {
+                this.maximumValueLength = value;
+            }
+        }
+
+        [SRCategoryAttribute("LongLineCategory")]
         [LocDisplayName("AutoFormatLongLinesProperty")]
         [SRDescriptionAttribute("AutoFormatLongLinesDescription")]
         public bool AutoFormatLongLines
@@ -506,6 +550,78 @@ namespace XmlNotepad
             {
                 this.ignoreDTD = value;
             }
+        }
+
+
+        [SRCategoryAttribute("XmlDiff")]
+        [LocDisplayName("XmlDiffIgnoreChildOrderProperty")]
+        [SRDescriptionAttribute("XmlDiffIgnoreChildOrderDescription")]
+        public bool XmlDiffIgnoreChildOrder
+        {
+            get
+            {
+                return this.xmlDiffIgnoreChildOrder;
+            }
+            set
+            {
+                this.xmlDiffIgnoreChildOrder = value;
+            }
+        }
+        [SRCategoryAttribute("XmlDiff")]
+        [LocDisplayName("XmlDiffIgnoreCommentsProperty")]
+        [SRDescriptionAttribute("XmlDiffIgnoreCommentsDescription")]
+        public bool XmlDiffIgnoreComments
+        {
+            get { return this.xmlDiffIgnoreComments; }
+            set { this.xmlDiffIgnoreComments = value; }
+        }
+        [SRCategoryAttribute("XmlDiff")]
+        [LocDisplayName("XmlDiffIgnorePIProperty")]
+        [SRDescriptionAttribute("XmlDiffIgnorePIDescription")]
+        public bool XmlDiffIgnorePI
+        {
+            get { return this.xmlDiffIgnorePI; }
+            set { this.xmlDiffIgnorePI = value; }
+        }
+        [SRCategoryAttribute("XmlDiff")]
+        [LocDisplayName("XmlDiffIgnoreWhitespaceProperty")]
+        [SRDescriptionAttribute("XmlDiffIgnoreWhitespaceDescription")]
+        public bool XmlDiffIgnoreWhitespace
+        {
+            get { return this.xmlDiffIgnoreWhitespace; }
+            set { this.xmlDiffIgnoreWhitespace = value; }
+        }
+        [SRCategoryAttribute("XmlDiff")]
+        [LocDisplayName("XmlDiffIgnoreNamespacesProperty")]
+        [SRDescriptionAttribute("XmlDiffIgnoreNamespacesDescription")]
+        public bool XmlDiffIgnoreNamespaces
+        {
+            get { return this.xmlDiffIgnoreNamespaces; }
+            set { this.xmlDiffIgnoreNamespaces = value; }
+        }
+        [SRCategoryAttribute("XmlDiff")]
+        [LocDisplayName("XmlDiffIgnorePrefixesProperty")]
+        [SRDescriptionAttribute("XmlDiffIgnorePrefixesDescription")]
+        public bool XmlDiffIgnorePrefixes
+        {
+            get { return this.xmlDiffIgnorePrefixes; }
+            set { this.xmlDiffIgnorePrefixes = value; }
+        }
+        [SRCategoryAttribute("XmlDiff")]
+        [LocDisplayName("XmlDiffIgnoreXmlDeclProperty")]
+        [SRDescriptionAttribute("XmlDiffIgnoreXmlDeclDescription")]
+        public bool XmlDiffIgnoreXmlDecl
+        {
+            get { return this.xmlDiffIgnoreXmlDecl; }
+            set { this.xmlDiffIgnoreXmlDecl = value; }
+        }
+        [SRCategoryAttribute("XmlDiff")]
+        [LocDisplayName("XmlDiffIgnoreDtdProperty")]
+        [SRDescriptionAttribute("XmlDiffIgnoreDtdDescription")]
+        public bool XmlDiffIgnoreDtd
+        {
+            get { return this.xmlDiffIgnoreDtd; }
+            set { this.xmlDiffIgnoreDtd = value; }
         }
     }
 }
